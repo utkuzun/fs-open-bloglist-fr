@@ -7,8 +7,18 @@ const getAll = async () => {
   return data
 }
 
+const addBlog = async (blog) => {
+  const config = { headers: { Authorization: token } }
+  const response = await axios.post(`${baseUrl}`, blog, config)
+  return response.data
+}
+
 const createAuthToken = (user) => {
   token = `bearer ${user.token}`
 }
 
-export default { getAll, createAuthToken }
+const removeToken = () => {
+  token = ''
+}
+
+export default { getAll, createAuthToken, removeToken, addBlog }

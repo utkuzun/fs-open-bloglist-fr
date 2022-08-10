@@ -13,6 +13,8 @@ const App = () => {
     password: '',
   })
 
+  const [blogForm, setBlogForm] = useState({ title: '', author: '', url: '' })
+
   useEffect(() => {
     const fetchBlogs = async () => {
       const blogs = await blogService.getAll()
@@ -23,9 +25,10 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const user = window.localStorage.getItem('user')
+    const user = JSON.parse(window.localStorage.getItem('user'))
     if (user) {
-      setUser(JSON.parse(user))
+      setUser(user)
+      blogService.createAuthToken(user)
     }
   }, [])
 
@@ -38,6 +41,18 @@ const App = () => {
       blogService.createAuthToken(user)
       window.localStorage.setItem('user', JSON.stringify(user))
     } catch (error) {
+      setLoginForm({ username: '', password: '' })
+      console.log(error.response.data.error)
+    }
+  }
+
+  const handleAddblogSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const { blog } = await blogService.addBlog(blogForm)
+      setBlogs([...blogs, blog])
+      setBlogForm({ title: '', author: '', url: '' })
+    } catch (error) {
       console.log(error.response.data.error)
     }
   }
@@ -46,16 +61,28 @@ const App = () => {
     const { name, value } = e.target
     setLoginForm({ ...loginForm, [name]: value })
   }
+  const handleBlogFormChange = (e) => {
+    const { name, value } = e.target
+    setBlogForm({ ...blogForm, [name]: value })
+  }
 
   const logout = () => {
     setUser({})
     window.localStorage.removeItem('user')
+    blogService.removeToken()
   }
 
   return (
     <div>
       {user.username ? (
-        <Blogs blogs={blogs} user={user} logout={logout} />
+        <Blogs
+          blogs={blogs}
+          user={user}
+          logout={logout}
+          blogForm={blogForm}
+          handleBlogFormChange={handleBlogFormChange}
+          handleAddblogSubmit={handleAddblogSubmit}
+        />
       ) : (
         <Login
           loginForm={loginForm}

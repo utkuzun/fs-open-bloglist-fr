@@ -1,0 +1,19 @@
+.info-container {
+  padding: 0.2rem 0.4rem;
+  background: lightgray;
+  border-radius: 5px;
+  border: 2px solid green;
+}
+
+.info-container.error {
+  border: 3px solid red;
+  font-weight: bold;
+}
+
+.info-text {
+  color: green;
+}
+
+.info-text.error {
+  color: red;
+}

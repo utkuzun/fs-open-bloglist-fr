@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
 import Login from './components/Login'
+import Info from './components/Info'
+
+import './index.css'
 
 import blogService from './services/blogs'
 import authService from './services/auth'
@@ -12,8 +15,8 @@ const App = () => {
     username: '',
     password: '',
   })
-
   const [blogForm, setBlogForm] = useState({ title: '', author: '', url: '' })
+  const [info, setInfo] = useState({ message: '', status: '' })
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -42,7 +45,8 @@ const App = () => {
       window.localStorage.setItem('user', JSON.stringify(user))
     } catch (error) {
       setLoginForm({ username: '', password: '' })
-      console.log(error.response.data.error)
+      const message = error.response.data.error
+      logInfo(message, 'error')
     }
   }
 
@@ -51,9 +55,11 @@ const App = () => {
     try {
       const { blog } = await blogService.addBlog(blogForm)
       setBlogs([...blogs, blog])
+      logInfo('Blog added', 'success')
       setBlogForm({ title: '', author: '', url: '' })
     } catch (error) {
-      console.log(error.response.data.error)
+      const message = error.response.data.error
+      logInfo(message, 'error')
     }
   }
 
@@ -72,8 +78,16 @@ const App = () => {
     blogService.removeToken()
   }
 
+  const logInfo = (message, status) => {
+    setInfo({ message, status })
+    setTimeout(() => {
+      setInfo({ message: '', status: '' })
+    }, 5000)
+  }
+
   return (
     <div>
+      <Info info={info} />
       {user.username ? (
         <Blogs
           blogs={blogs}

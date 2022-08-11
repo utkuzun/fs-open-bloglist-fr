@@ -31,6 +31,11 @@ const App = () => {
     }
   }, [])
 
+  useEffect(() => {
+    const newBlogs = blogs
+    setBlogs(newBlogs)
+  }, [blogs])
+
   const loginUser = async (loginForm) => {
     try {
       const user = await authService.login(loginForm)
@@ -85,7 +90,7 @@ const App = () => {
       <Info info={info} />
       {user.username ? (
         <Blogs
-          blogs={blogs}
+          blogs={blogs.sort((a, b) => b.likes - a.likes)}
           user={user}
           logout={logout}
           createBlog={createBlog}

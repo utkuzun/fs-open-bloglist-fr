@@ -3,7 +3,7 @@ import Blog from './Blog'
 import AddBlog from './AddBlog'
 import ToggleBox from './ToggleBox'
 
-const Blogs = ({ blogs, user, logout, createBlog }) => {
+const Blogs = ({ blogs, user, logout, createBlog, updateBlog }) => {
   const { name } = user
   return (
     <div>
@@ -15,7 +15,7 @@ const Blogs = ({ blogs, user, logout, createBlog }) => {
       </ToggleBox>
       <br />
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       ))}
     </div>
   )

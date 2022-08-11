@@ -54,6 +54,19 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (blog) => {
+    try {
+      const { blog: blogAdded } = await blogService.updateBlog(blog)
+      const newBlogs = blogs.map((item) =>
+        blog.id === item.id ? blogAdded : item
+      )
+      setBlogs(newBlogs)
+    } catch (error) {
+      const message = error.response.data.error
+      logInfo(message, 'error')
+    }
+  }
+
   const logout = () => {
     setUser({})
     window.localStorage.removeItem('user')
@@ -76,6 +89,7 @@ const App = () => {
           user={user}
           logout={logout}
           createBlog={createBlog}
+          updateBlog={updateBlog}
         />
       ) : (
         <Login loginUser={loginUser} />

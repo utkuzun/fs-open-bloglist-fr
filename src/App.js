@@ -11,11 +11,7 @@ import authService from './services/auth'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState({})
-  const [loginForm, setLoginForm] = useState({
-    username: '',
-    password: '',
-  })
-  const [blogForm, setBlogForm] = useState({ title: '', author: '', url: '' })
+
   const [info, setInfo] = useState({ message: '', status: '' })
 
   useEffect(() => {
@@ -35,41 +31,27 @@ const App = () => {
     }
   }, [])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const loginUser = async (loginForm) => {
     try {
       const user = await authService.login(loginForm)
       setUser(user)
-      setLoginForm({ username: '', password: '' })
       blogService.createAuthToken(user)
       window.localStorage.setItem('user', JSON.stringify(user))
     } catch (error) {
-      setLoginForm({ username: '', password: '' })
       const message = error.response.data.error
       logInfo(message, 'error')
     }
   }
 
-  const handleAddblogSubmit = async (e) => {
-    e.preventDefault()
+  const createBlog = async (blogForm) => {
     try {
       const { blog } = await blogService.addBlog(blogForm)
       setBlogs([...blogs, blog])
       logInfo('Blog added', 'success')
-      setBlogForm({ title: '', author: '', url: '' })
     } catch (error) {
       const message = error.response.data.error
       logInfo(message, 'error')
     }
-  }
-
-  const handleLoginFormChange = (e) => {
-    const { name, value } = e.target
-    setLoginForm({ ...loginForm, [name]: value })
-  }
-  const handleBlogFormChange = (e) => {
-    const { name, value } = e.target
-    setBlogForm({ ...blogForm, [name]: value })
   }
 
   const logout = () => {
@@ -93,16 +75,10 @@ const App = () => {
           blogs={blogs}
           user={user}
           logout={logout}
-          blogForm={blogForm}
-          handleBlogFormChange={handleBlogFormChange}
-          handleAddblogSubmit={handleAddblogSubmit}
+          createBlog={createBlog}
         />
       ) : (
-        <Login
-          loginForm={loginForm}
-          handleSubmit={handleSubmit}
-          handleLoginFormChange={handleLoginFormChange}
-        />
+        <Login loginUser={loginUser} />
       )}
     </div>
   )

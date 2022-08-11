@@ -1,7 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const Login = ({ loginForm, handleLoginFormChange, handleSubmit }) => {
+const Login = ({ loginUser }) => {
+  const [loginForm, setLoginForm] = useState({
+    username: '',
+    password: '',
+  })
+
   const { username, password } = loginForm
+
+  const handleLoginFormChange = (e) => {
+    const { name, value } = e.target
+    setLoginForm({ ...loginForm, [name]: value })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await loginUser(loginForm)
+      setLoginForm({ username: '', password: '' })
+    } catch (error) {
+      setLoginForm({ username: '', password: '' })
+      const message = error.response.data.error
+      console.log(message, 'error')
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit}>

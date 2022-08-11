@@ -1,7 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const AddBlog = ({ blogForm, handleBlogFormChange, handleAddblogSubmit }) => {
+const AddBlog = ({ createBlog }) => {
+  const [blogForm, setBlogForm] = useState({ title: '', author: '', url: '' })
+
   const { title, author, url } = blogForm
+
+  const handleBlogFormChange = (e) => {
+    const { name, value } = e.target
+    setBlogForm({ ...blogForm, [name]: value })
+  }
+
+  const handleAddblogSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await createBlog(blogForm)
+      setBlogForm({ title: '', author: '', url: '' })
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
       <h1>create new</h1>
@@ -33,7 +50,7 @@ const AddBlog = ({ blogForm, handleBlogFormChange, handleAddblogSubmit }) => {
             onChange={handleBlogFormChange}
           />
         </div>
-        <button type='submit'>Submit</button>
+        <button type='submit'>submit</button>
       </form>
     </>
   )

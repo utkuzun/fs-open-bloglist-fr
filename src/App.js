@@ -72,6 +72,17 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (blog) => {
+    try {
+      await blogService.removeBlog(blog)
+      const newBlogs = blogs.filter((item) => item.id !== blog.id)
+      setBlogs(newBlogs)
+    } catch (error) {
+      const message = error.response.data.error
+      logInfo(message, 'error')
+    }
+  }
+
   const logout = () => {
     setUser({})
     window.localStorage.removeItem('user')
@@ -95,6 +106,7 @@ const App = () => {
           logout={logout}
           createBlog={createBlog}
           updateBlog={updateBlog}
+          removeBlog={removeBlog}
         />
       ) : (
         <Login loginUser={loginUser} />

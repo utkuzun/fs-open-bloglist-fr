@@ -7,18 +7,16 @@ const ToggleBox = ({ buttonLabel, children }) => {
     setShowChildren(!showChildren)
   }
 
-  if (!showChildren) {
-    return (
-      <>
-        <button onClick={toggleShow}>{buttonLabel}</button>
-      </>
-    )
-  }
-
   return (
     <>
-      {children}
-      <button onClick={toggleShow}>cancel</button>
+      <button className={!showChildren ? 'show' : 'hide'} onClick={toggleShow}>
+        {buttonLabel}
+      </button>
+
+      <div className={!showChildren ? 'hide' : 'show'}>
+        {children}
+        <button onClick={toggleShow}>cancel</button>
+      </div>
     </>
   )
 }

@@ -9,6 +9,7 @@ describe('<Blog />', () => {
   let container
   let updateBlog
   let removeBlog
+  const user = userEvent.setup()
 
   beforeEach(() => {
     updateBlog = jest.fn()
@@ -39,7 +40,6 @@ describe('<Blog />', () => {
   })
 
   test('show details of a blog', async () => {
-    const user = userEvent.setup()
     const button = screen.queryByText('show')
 
     await user.click(button)
@@ -60,7 +60,6 @@ describe('<Blog />', () => {
   })
 
   test('check if like button works', async () => {
-    const user = userEvent.setup()
     const button = screen.queryByText('show')
 
     await user.click(button)

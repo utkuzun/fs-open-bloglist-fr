@@ -3,25 +3,16 @@ import Blogs from './components/Blogs'
 import Login from './components/Login'
 import Info from './components/Info'
 
+import blogService from './services/blogs'
+
 import './index.css'
 
-import blogService from './services/blogs'
 import authService from './services/auth'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState({})
 
   const [info, setInfo] = useState({ message: '', status: '' })
-
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
-
-    fetchBlogs()
-  }, [])
 
   useEffect(() => {
     const user = JSON.parse(window.localStorage.getItem('user'))
@@ -31,52 +22,12 @@ const App = () => {
     }
   }, [])
 
-  useEffect(() => {
-    const newBlogs = blogs
-    setBlogs(newBlogs)
-  }, [blogs])
-
   const loginUser = async (loginForm) => {
     try {
       const user = await authService.login(loginForm)
       setUser(user)
       blogService.createAuthToken(user)
       window.localStorage.setItem('user', JSON.stringify(user))
-    } catch (error) {
-      const message = error.response.data.error
-      logInfo(message, 'error')
-    }
-  }
-
-  const createBlog = async (blogForm) => {
-    try {
-      const { blog } = await blogService.addBlog(blogForm)
-      setBlogs([...blogs, blog])
-      logInfo('Blog added', 'success')
-    } catch (error) {
-      const message = error.response.data.error
-      logInfo(message, 'error')
-    }
-  }
-
-  const updateBlog = async (blog) => {
-    try {
-      const { blog: blogAdded } = await blogService.updateBlog(blog)
-      const newBlogs = blogs.map((item) =>
-        blog.id === item.id ? blogAdded : item
-      )
-      setBlogs(newBlogs)
-    } catch (error) {
-      const message = error.response.data.error
-      logInfo(message, 'error')
-    }
-  }
-
-  const removeBlog = async (blog) => {
-    try {
-      await blogService.removeBlog(blog)
-      const newBlogs = blogs.filter((item) => item.id !== blog.id)
-      setBlogs(newBlogs)
     } catch (error) {
       const message = error.response.data.error
       logInfo(message, 'error')
@@ -100,14 +51,7 @@ const App = () => {
     <div>
       <Info info={info} />
       {user.username ? (
-        <Blogs
-          blogs={blogs.sort((a, b) => b.likes - a.likes)}
-          user={user}
-          logout={logout}
-          createBlog={createBlog}
-          updateBlog={updateBlog}
-          removeBlog={removeBlog}
-        />
+        <Blogs user={user} logout={logout} logInfo={logInfo} />
       ) : (
         <Login loginUser={loginUser} />
       )}

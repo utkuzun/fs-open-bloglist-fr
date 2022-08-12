@@ -14,7 +14,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
     }
   }
 
-  const remove = async (e) => {
+  const remove = async () => {
     try {
       if (window.confirm(`Delete blog ${blog.title} ?`)) {
         await removeBlog(blog)

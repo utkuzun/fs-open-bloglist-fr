@@ -1,8 +1,10 @@
+/* eslint-disable linebreak-style */
 module.exports = {
   env: {
     browser: true,
     es6: true,
     'jest/globals': true,
+    node: true,
   },
   extends: ['eslint:recommended', 'plugin:react/recommended'],
   parserOptions: {

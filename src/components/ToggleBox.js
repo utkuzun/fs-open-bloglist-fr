@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const ToggleBox = ({ buttonLabel, children }) => {
-  const [showChildren, setShowChildren] = useState(false)
-
+const ToggleBox = ({
+  buttonLabel,
+  children,
+  showChildren,
+  setShowChildren,
+}) => {
   const toggleShow = () => {
     setShowChildren(!showChildren)
   }

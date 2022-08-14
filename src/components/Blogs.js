@@ -8,6 +8,7 @@ import blogService from '../services/blogs'
 
 const Blogs = ({ user, logout, logInfo }) => {
   const [blogs, setBlogs] = useState([])
+  const [showChildren, setShowChildren] = useState(false)
 
   const { name } = user
 
@@ -24,6 +25,7 @@ const Blogs = ({ user, logout, logInfo }) => {
     try {
       const { blog } = await blogService.addBlog(blogForm)
       setBlogs([...blogs, blog])
+      setShowChildren(!showChildren)
       logInfo('Blog added', 'success')
     } catch (error) {
       const message = error.response.data.error
@@ -61,7 +63,11 @@ const Blogs = ({ user, logout, logInfo }) => {
       <p>{name} logged in</p>
       <button onClick={logout}>Logout</button>
       <br />
-      <ToggleBox buttonLabel={'add blog'}>
+      <ToggleBox
+        showChildren={showChildren}
+        setShowChildren={setShowChildren}
+        buttonLabel={'add blog'}
+      >
         <AddBlog createBlog={createBlog} />
       </ToggleBox>
       <br />

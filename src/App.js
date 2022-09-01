@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import Info from './components/Info'
 
 import blogService from './services/blogs'
+
+import { displayInfo } from './reducers/infoReducer'
 
 import './index.css'
 
@@ -12,7 +16,7 @@ import authService from './services/auth'
 const App = () => {
   const [user, setUser] = useState({})
 
-  const [info, setInfo] = useState({ message: '', status: '' })
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const user = JSON.parse(window.localStorage.getItem('user'))
@@ -28,9 +32,11 @@ const App = () => {
       setUser(user)
       blogService.createAuthToken(user)
       window.localStorage.setItem('user', JSON.stringify(user))
+      const message = `user ${user.name} logged in`
+      dispatch(displayInfo(message, 'success'))
     } catch (error) {
       const message = error.response.data.error
-      logInfo(message, 'error')
+      dispatch(displayInfo(message, 'error'))
     }
   }
 
@@ -40,18 +46,11 @@ const App = () => {
     blogService.removeToken()
   }
 
-  const logInfo = (message, status) => {
-    setInfo({ message, status })
-    setTimeout(() => {
-      setInfo({ message: '', status: '' })
-    }, 5000)
-  }
-
   return (
     <div>
-      <Info info={info} />
+      <Info />
       {user.username ? (
-        <Blogs user={user} logout={logout} logInfo={logInfo} />
+        <Blogs user={user} logout={logout} />
       ) : (
         <Login loginUser={loginUser} />
       )}

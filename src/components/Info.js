@@ -1,7 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-const Info = ({ info }) => {
-  const { message, status } = info
+const Info = () => {
+  const info = useSelector((state) => state.info)
+
+  const { status, message } = info
+
   if (!message) {
     return <></>
   }

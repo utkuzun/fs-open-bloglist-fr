@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { displayInfo } from '../reducers/infoReducer'
 
 import Blog from './Blog'
 import AddBlog from './AddBlog'
@@ -6,9 +9,11 @@ import ToggleBox from './ToggleBox'
 
 import blogService from '../services/blogs'
 
-const Blogs = ({ user, logout, logInfo }) => {
+const Blogs = ({ user, logout }) => {
   const [blogs, setBlogs] = useState([])
   const [showChildren, setShowChildren] = useState(false)
+
+  const dispatch = useDispatch()
 
   const { name } = user
 
@@ -26,10 +31,10 @@ const Blogs = ({ user, logout, logInfo }) => {
       const { blog } = await blogService.addBlog(blogForm)
       setBlogs([...blogs, blog])
       setShowChildren(!showChildren)
-      logInfo('Blog added', 'success')
+      dispatch(displayInfo('Blog added', 'success'))
     } catch (error) {
       const message = error.response.data.error
-      logInfo(message, 'error')
+      dispatch(displayInfo(message, 'error'))
     }
   }
 
@@ -42,7 +47,7 @@ const Blogs = ({ user, logout, logInfo }) => {
       setBlogs(newBlogs)
     } catch (error) {
       const message = error.response.data.error
-      logInfo(message, 'error')
+      dispatch(displayInfo(message, 'error'))
     }
   }
 
@@ -53,7 +58,7 @@ const Blogs = ({ user, logout, logInfo }) => {
       setBlogs(newBlogs)
     } catch (error) {
       const message = error.response.data.error
-      logInfo(message, 'error')
+      dispatch(displayInfo(message, 'error'))
     }
   }
 

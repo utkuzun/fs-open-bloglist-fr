@@ -1,66 +1,61 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { displayInfo } from '../reducers/infoReducer'
+// import { displayInfo } from '../reducers/infoReducer'
 
 import Blog from './Blog'
 import AddBlog from './AddBlog'
 import ToggleBox from './ToggleBox'
 
-import blogService from '../services/blogs'
+import { getInitialBlogs, addBlog } from '../reducers/blogReducer'
+import { displayInfo } from '../reducers/infoReducer'
 
 const Blogs = ({ user, logout }) => {
-  const [blogs, setBlogs] = useState([])
   const [showChildren, setShowChildren] = useState(false)
+  const blogs = useSelector((state) => state.blogs)
 
   const dispatch = useDispatch()
 
   const { name } = user
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
-
-    fetchBlogs()
+    dispatch(getInitialBlogs())
   }, [])
 
   const createBlog = async (blogForm) => {
     try {
-      const { blog } = await blogService.addBlog(blogForm)
-      setBlogs([...blogs, blog])
-      setShowChildren(!showChildren)
+      dispatch(addBlog(blogForm))
       dispatch(displayInfo('Blog added', 'success'))
+      setShowChildren(!showChildren)
     } catch (error) {
       const message = error.response.data.error
       dispatch(displayInfo(message, 'error'))
     }
   }
 
-  const updateBlog = async (blog) => {
-    try {
-      const { blog: blogAdded } = await blogService.updateBlog(blog)
-      const newBlogs = blogs.map((item) =>
-        blog.id === item.id ? blogAdded : item
-      )
-      setBlogs(newBlogs)
-    } catch (error) {
-      const message = error.response.data.error
-      dispatch(displayInfo(message, 'error'))
-    }
-  }
+  // const updateBlog = async (blog) => {
+  //   try {
+  //     const { blog: blogAdded } = await blogService.updateBlog(blog)
+  //     const newBlogs = blogs.map((item) =>
+  //       blog.id === item.id ? blogAdded : item
+  //     )
+  //     setBlogs(newBlogs)
+  //   } catch (error) {
+  //     const message = error.response.data.error
+  //     dispatch(displayInfo(message, 'error'))
+  //   }
+  // }
 
-  const removeBlog = async (blog) => {
-    try {
-      await blogService.removeBlog(blog)
-      const newBlogs = blogs.filter((item) => item.id !== blog.id)
-      setBlogs(newBlogs)
-    } catch (error) {
-      const message = error.response.data.error
-      dispatch(displayInfo(message, 'error'))
-    }
-  }
+  // const removeBlog = async (blog) => {
+  //   try {
+  //     await blogService.removeBlog(blog)
+  //     const newBlogs = blogs.filter((item) => item.id !== blog.id)
+  //     setBlogs(newBlogs)
+  //   } catch (error) {
+  //     const message = error.response.data.error
+  //     dispatch(displayInfo(message, 'error'))
+  //   }
+  // }
 
   return (
     <div>
@@ -77,13 +72,14 @@ const Blogs = ({ user, logout }) => {
       </ToggleBox>
       <br />
       {blogs
+        .slice()
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}
-            updateBlog={updateBlog}
-            removeBlog={removeBlog}
+            // updateBlog={updateBlog}
+            // removeBlog={removeBlog}
           />
         ))}
     </div>

@@ -1,26 +1,34 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, updateBlog, removeBlog }) => {
+import { updateThunk, removeThunk } from '../reducers/blogReducer'
+import { displayInfo } from '../reducers/infoReducer'
+
+const Blog = ({ blog }) => {
   const [show, setShow] = useState(false)
   const { title, likes, url, author } = blog
+
+  const dispatch = useDispatch()
 
   const increaseLike = async () => {
     const blogToUpdate = { ...blog, likes: blog.likes + 1 }
     delete blogToUpdate.user
     try {
-      await updateBlog(blogToUpdate)
+      dispatch(updateThunk(blogToUpdate))
     } catch (error) {
-      console.log(error)
+      const message = error.response.data.error
+      dispatch(displayInfo(message, 'error'))
     }
   }
 
   const remove = async () => {
     try {
       if (window.confirm(`Delete blog ${blog.title} ?`)) {
-        await removeBlog(blog)
+        dispatch(removeThunk(blog))
       }
     } catch (error) {
-      console.log(error)
+      const message = error.response.data.error
+      dispatch(displayInfo(message, 'error'))
     }
   }
 

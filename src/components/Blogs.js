@@ -7,12 +7,7 @@ import Blog from './Blog'
 import AddBlog from './AddBlog'
 import ToggleBox from './ToggleBox'
 
-import {
-  getInitialBlogs,
-  addBlog,
-  updateThunk,
-  removeThunk,
-} from '../reducers/blogReducer'
+import { getInitialBlogs, addBlog } from '../reducers/blogReducer'
 import { displayInfo } from '../reducers/infoReducer'
 
 const Blogs = ({ user, logout }) => {
@@ -38,24 +33,6 @@ const Blogs = ({ user, logout }) => {
     }
   }
 
-  const updateBlog = async (blog) => {
-    try {
-      dispatch(updateThunk(blog))
-    } catch (error) {
-      const message = error.response.data.error
-      dispatch(displayInfo(message, 'error'))
-    }
-  }
-
-  const removeBlog = async (blog) => {
-    try {
-      dispatch(removeThunk(blog))
-    } catch (error) {
-      const message = error.response.data.error
-      dispatch(displayInfo(message, 'error'))
-    }
-  }
-
   return (
     <div>
       <h2>blogs</h2>
@@ -74,12 +51,7 @@ const Blogs = ({ user, logout }) => {
         .slice()
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlog={updateBlog}
-            removeBlog={removeBlog}
-          />
+          <Blog key={blog.id} blog={blog} />
         ))}
     </div>
   )

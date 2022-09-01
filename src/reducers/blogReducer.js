@@ -44,9 +44,9 @@ export const addBlog = (blodToAdd) => {
   }
 }
 
-export const updateThunk = (blodToAdd) => {
+export const updateThunk = (blogToAdd) => {
   return async (dispatch) => {
-    const { blog: blogAdded } = await blogService.updateBlog(blodToAdd)
+    const { blog: blogAdded } = await blogService.updateBlog(blogToAdd)
     dispatch(updateBlog(blogAdded))
   }
 }

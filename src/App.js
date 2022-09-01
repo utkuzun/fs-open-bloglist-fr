@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Blogs from './components/Blogs'
 import Login from './components/Login'
@@ -7,6 +7,7 @@ import Info from './components/Info'
 
 import blogService from './services/blogs'
 
+import { setInitUser, setUser } from './reducers/userReducer'
 import { displayInfo } from './reducers/infoReducer'
 
 import './index.css'
@@ -14,22 +15,18 @@ import './index.css'
 import authService from './services/auth'
 
 const App = () => {
-  const [user, setUser] = useState({})
+  const user = useSelector((state) => state.user)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const user = JSON.parse(window.localStorage.getItem('user'))
-    if (user) {
-      setUser(user)
-      blogService.createAuthToken(user)
-    }
+    dispatch(setInitUser())
   }, [])
 
   const loginUser = async (loginForm) => {
     try {
       const user = await authService.login(loginForm)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.createAuthToken(user)
       window.localStorage.setItem('user', JSON.stringify(user))
       const message = `user ${user.name} logged in`
@@ -41,7 +38,7 @@ const App = () => {
   }
 
   const logout = () => {
-    setUser({})
+    dispatch(setUser({}))
     window.localStorage.removeItem('user')
     blogService.removeToken()
   }

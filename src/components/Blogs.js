@@ -7,7 +7,12 @@ import Blog from './Blog'
 import AddBlog from './AddBlog'
 import ToggleBox from './ToggleBox'
 
-import { getInitialBlogs, addBlog } from '../reducers/blogReducer'
+import {
+  getInitialBlogs,
+  addBlog,
+  updateThunk,
+  removeThunk,
+} from '../reducers/blogReducer'
 import { displayInfo } from '../reducers/infoReducer'
 
 const Blogs = ({ user, logout }) => {
@@ -33,29 +38,23 @@ const Blogs = ({ user, logout }) => {
     }
   }
 
-  // const updateBlog = async (blog) => {
-  //   try {
-  //     const { blog: blogAdded } = await blogService.updateBlog(blog)
-  //     const newBlogs = blogs.map((item) =>
-  //       blog.id === item.id ? blogAdded : item
-  //     )
-  //     setBlogs(newBlogs)
-  //   } catch (error) {
-  //     const message = error.response.data.error
-  //     dispatch(displayInfo(message, 'error'))
-  //   }
-  // }
+  const updateBlog = async (blog) => {
+    try {
+      dispatch(updateThunk(blog))
+    } catch (error) {
+      const message = error.response.data.error
+      dispatch(displayInfo(message, 'error'))
+    }
+  }
 
-  // const removeBlog = async (blog) => {
-  //   try {
-  //     await blogService.removeBlog(blog)
-  //     const newBlogs = blogs.filter((item) => item.id !== blog.id)
-  //     setBlogs(newBlogs)
-  //   } catch (error) {
-  //     const message = error.response.data.error
-  //     dispatch(displayInfo(message, 'error'))
-  //   }
-  // }
+  const removeBlog = async (blog) => {
+    try {
+      dispatch(removeThunk(blog))
+    } catch (error) {
+      const message = error.response.data.error
+      dispatch(displayInfo(message, 'error'))
+    }
+  }
 
   return (
     <div>
@@ -78,8 +77,8 @@ const Blogs = ({ user, logout }) => {
           <Blog
             key={blog.id}
             blog={blog}
-            // updateBlog={updateBlog}
-            // removeBlog={removeBlog}
+            updateBlog={updateBlog}
+            removeBlog={removeBlog}
           />
         ))}
     </div>

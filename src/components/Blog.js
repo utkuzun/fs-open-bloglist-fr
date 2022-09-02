@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import { updateThunk, removeThunk } from '../reducers/blogReducer'
 import { displayInfo } from '../reducers/infoReducer'
+import { useNavigate } from 'react-router-dom'
 
-const Blog = ({ blog }) => {
-  const [show, setShow] = useState(false)
+const Blog = ({ blogSelected: blog }) => {
+  if (!blog) {
+    return null
+  }
+
   const { title, likes, url, author } = blog
 
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const increaseLike = async () => {
@@ -24,7 +29,8 @@ const Blog = ({ blog }) => {
   const remove = async () => {
     try {
       if (window.confirm(`Delete blog ${blog.title} ?`)) {
-        dispatch(removeThunk(blog))
+        await dispatch(removeThunk(blog))
+        navigate('/')
       }
     } catch (error) {
       const message = error.response.data.error
@@ -35,24 +41,14 @@ const Blog = ({ blog }) => {
   return (
     <div>
       <div>
+        <p>{title}</p>
+        <p>{url}</p>
         <p>
-          {title}
-          <button onClick={() => setShow(!show)}>
-            {show ? 'hide' : 'show'}
-          </button>
+          likes {likes} <button onClick={increaseLike}>like</button>
         </p>
+        <p>{author}</p>
+        <button onClick={remove}>remove</button>
       </div>
-      {show && (
-        <div>
-          <p>{url}</p>
-          <p>
-            likes {likes} <button onClick={increaseLike}>like</button>
-          </p>
-          <p>{author}</p>
-          <button onClick={remove}>remove</button>
-        </div>
-      )}
-      <hr />
     </div>
   )
 }

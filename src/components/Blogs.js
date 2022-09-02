@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
+
 import AddBlog from './AddBlog'
 import ToggleBox from './ToggleBox'
 
-import { getInitialBlogs, addBlog } from '../reducers/blogReducer'
+import { addBlog } from '../reducers/blogReducer'
 import { displayInfo } from '../reducers/infoReducer'
 
 const Blogs = () => {
@@ -13,10 +14,6 @@ const Blogs = () => {
   const blogs = useSelector((state) => state.blogs)
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(getInitialBlogs())
-  }, [])
 
   const createBlog = async (blogForm) => {
     try {
@@ -39,13 +36,16 @@ const Blogs = () => {
       >
         <AddBlog createBlog={createBlog} />
       </ToggleBox>
-      <br />
-      {blogs
-        .slice()
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
+      <ul>
+        {blogs
+          .slice()
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <li key={blog.id}>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </li>
+          ))}
+      </ul>
     </div>
   )
 }

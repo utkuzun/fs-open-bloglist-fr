@@ -6,14 +6,14 @@ import { displayInfo } from '../reducers/infoReducer'
 import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ blogSelected: blog }) => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   if (!blog) {
     return null
   }
 
   const { title, likes, url, author } = blog
-
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const increaseLike = async () => {
     const blogToUpdate = { ...blog, likes: blog.likes + 1 }

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 import blogService from '../services/blogs'
+import authService from '../services/auth'
 
 const initialState = { name: '', token: '', username: '' }
 
@@ -22,6 +24,23 @@ export const setInitUser = () => {
     const user = JSON.parse(window.localStorage.getItem('user'))
     dispatch(setUser(user))
     blogService.createAuthToken(user)
+  }
+}
+
+export const loginUser = (loginForm) => {
+  return async (dispatch) => {
+    const user = await authService.login(loginForm)
+    dispatch(setUser(user))
+    blogService.createAuthToken(user)
+    window.localStorage.setItem('user', JSON.stringify(user))
+  }
+}
+
+export const logout = () => {
+  return async (dispatch) => {
+    dispatch(setUser({}))
+    window.localStorage.removeItem('user')
+    blogService.removeToken()
   }
 }
 

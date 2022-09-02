@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-// import { displayInfo } from '../reducers/infoReducer'
-
 import Blog from './Blog'
 import AddBlog from './AddBlog'
 import ToggleBox from './ToggleBox'
 
 import { getInitialBlogs, addBlog } from '../reducers/blogReducer'
 import { displayInfo } from '../reducers/infoReducer'
+import { logout } from '../reducers/userReducer'
 
-const Blogs = ({ user, logout }) => {
+const Blogs = () => {
   const [showChildren, setShowChildren] = useState(false)
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
 
   const dispatch = useDispatch()
 
@@ -37,7 +37,7 @@ const Blogs = ({ user, logout }) => {
     <div>
       <h2>blogs</h2>
       <p>{name} logged in</p>
-      <button onClick={logout}>Logout</button>
+      <button onClick={() => dispatch(logout())}>Logout</button>
       <br />
       <ToggleBox
         showChildren={showChildren}

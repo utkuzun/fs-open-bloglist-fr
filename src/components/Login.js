@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-const Login = ({ loginUser }) => {
+import { loginUser } from '../reducers/userReducer'
+import { displayInfo } from '../reducers/infoReducer'
+
+const Login = () => {
   const [loginForm, setLoginForm] = useState({
     username: '',
     password: '',
   })
 
   const { username, password } = loginForm
+
+  const dispatch = useDispatch()
 
   const handleLoginFormChange = (e) => {
     const { name, value } = e.target
@@ -16,12 +22,15 @@ const Login = ({ loginUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await loginUser(loginForm)
+      await dispatch(loginUser(loginForm))
       setLoginForm({ username: '', password: '' })
+      const message = `user ${username} logged in`
+
+      dispatch(displayInfo(message, 'success'))
     } catch (error) {
       setLoginForm({ username: '', password: '' })
       const message = error.response.data.error
-      console.log(message, 'error')
+      dispatch(displayInfo(message, 'error'))
     }
   }
 

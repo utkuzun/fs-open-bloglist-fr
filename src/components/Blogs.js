@@ -7,16 +7,12 @@ import ToggleBox from './ToggleBox'
 
 import { getInitialBlogs, addBlog } from '../reducers/blogReducer'
 import { displayInfo } from '../reducers/infoReducer'
-import { logout } from '../reducers/userReducer'
 
 const Blogs = () => {
   const [showChildren, setShowChildren] = useState(false)
   const blogs = useSelector((state) => state.blogs)
-  const user = useSelector((state) => state.user)
 
   const dispatch = useDispatch()
-
-  const { name } = user
 
   useEffect(() => {
     dispatch(getInitialBlogs())
@@ -35,9 +31,6 @@ const Blogs = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      <p>{name} logged in</p>
-      <button onClick={() => dispatch(logout())}>Logout</button>
       <br />
       <ToggleBox
         showChildren={showChildren}

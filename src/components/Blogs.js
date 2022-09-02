@@ -28,6 +28,8 @@ const Blogs = () => {
 
   return (
     <div>
+      <h2>blogs</h2>
+
       <br />
       <ToggleBox
         showChildren={showChildren}

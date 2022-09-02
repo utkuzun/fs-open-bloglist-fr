@@ -22,8 +22,11 @@ const userSlice = createSlice({
 export const setInitUser = () => {
   return async (dispatch) => {
     const user = JSON.parse(window.localStorage.getItem('user'))
-    dispatch(setUser(user))
-    blogService.createAuthToken(user)
+    if (user) {
+      dispatch(setUser(user))
+      blogService.createAuthToken(user)
+    }
+    dispatch(setUser(initialState))
   }
 }
 
@@ -38,7 +41,7 @@ export const loginUser = (loginForm) => {
 
 export const logout = () => {
   return async (dispatch) => {
-    dispatch(setUser({}))
+    dispatch(setUser(initialState))
     window.localStorage.removeItem('user')
     blogService.removeToken()
   }

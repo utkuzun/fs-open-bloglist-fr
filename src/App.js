@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route, useMatch, Navigate } from 'react-router-dom'
 
 import Blogs from './components/Blogs'
 import Blog from './components/Blog'
@@ -9,20 +9,19 @@ import Login from './components/Login'
 import Info from './components/Info'
 import Users from './components/Users'
 import User from './components/User'
+import Menu from './components/Menu'
 
 import { setInitUser } from './reducers/userReducer'
 import { setInitUsers } from './reducers/usersReducer'
-import { logout } from './reducers/userReducer'
 import { getInitialBlogs } from './reducers/blogReducer'
 
 import './index.css'
 
 const App = () => {
-  const user = useSelector((state) => state.user)
   const users = useSelector((state) => state.users)
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
 
-  const { name } = user
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -50,26 +49,24 @@ const App = () => {
 
   return (
     <div>
+      <Menu />
       <Info />
-      <h2>blogs</h2>
-      <p>{name} logged in</p>
-      <button onClick={() => dispatch(logout())}>Logout</button>
-      {user.username ? (
-        <Routes>
-          <Route
-            path='/users/:id'
-            element={<User userSelected={userSelected} />}
-          />
-          <Route
-            path='/blogs/:id'
-            element={<Blog blogSelected={blogSelected} />}
-          />
-          <Route path='/users' element={<Users />} />
-          <Route path='/' element={<Blogs />} />
-        </Routes>
-      ) : (
-        <Login />
-      )}
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route
+          path='/users/:id'
+          element={<User userSelected={userSelected} />}
+        />
+        <Route
+          path='/blogs/:id'
+          element={<Blog blogSelected={blogSelected} />}
+        />
+        <Route path='/users' element={<Users />} />
+        <Route
+          path='/'
+          element={user.username ? <Blogs /> : <Navigate replace to='/login' />}
+        />
+      </Routes>
     </div>
   )
 }

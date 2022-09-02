@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import { loginUser } from '../reducers/userReducer'
 import { displayInfo } from '../reducers/infoReducer'
@@ -13,6 +14,7 @@ const Login = () => {
   const { username, password } = loginForm
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleLoginFormChange = (e) => {
     const { name, value } = e.target
@@ -25,7 +27,7 @@ const Login = () => {
       await dispatch(loginUser(loginForm))
       setLoginForm({ username: '', password: '' })
       const message = `user ${username} logged in`
-
+      navigate('/')
       dispatch(displayInfo(message, 'success'))
     } catch (error) {
       setLoginForm({ username: '', password: '' })

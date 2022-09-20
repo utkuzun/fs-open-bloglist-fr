@@ -58,6 +58,13 @@ export const removeThunk = (blog) => {
   }
 }
 
+export const commentToBlogThunk = (id, comment) => {
+  return async (dispatch) => {
+    const { blog: blogCommented } = await blogService.commentToBlog(id, comment)
+    dispatch(updateBlog(blogCommented))
+  }
+}
+
 export const { setBlogs, addBlogList, updateBlog, removeBlog } =
   blogsSlice.actions
 export default blogsSlice.reducer

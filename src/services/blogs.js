@@ -25,6 +25,12 @@ const removeBlog = async (blog) => {
   return data
 }
 
+const commentToBlog = async (id, comment) => {
+  const response = await axios.post(`${baseUrl}/${id}/comments`, { comment })
+  const { data } = response
+  return data
+}
+
 const createAuthToken = (user) => {
   token = `bearer ${user.token}`
 }
@@ -40,4 +46,5 @@ export default {
   addBlog,
   updateBlog,
   removeBlog,
+  commentToBlog,
 }

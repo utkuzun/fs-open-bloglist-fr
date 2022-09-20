@@ -1,19 +1,26 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
-import { updateThunk, removeThunk } from '../reducers/blogReducer'
+import {
+  updateThunk,
+  removeThunk,
+  commentToBlogThunk,
+} from '../reducers/blogReducer'
 import { displayInfo } from '../reducers/infoReducer'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 const Blog = ({ blogSelected: blog }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const [commentIn, setCommentIn] = useState('')
+
   if (!blog) {
     return null
   }
 
-  const { title, likes, url, author } = blog
+  const { id, title, likes, url, author, comments } = blog
 
   const increaseLike = async () => {
     const blogToUpdate = { ...blog, likes: blog.likes + 1 }
@@ -38,6 +45,16 @@ const Blog = ({ blogSelected: blog }) => {
     }
   }
 
+  const comment = async (e) => {
+    e.preventDefault()
+    try {
+      await dispatch(commentToBlogThunk(id, commentIn))
+      setCommentIn('')
+    } catch (error) {
+      const message = error.response.data.error
+      dispatch(displayInfo(message, 'error'))
+    }
+  }
   return (
     <div>
       <div>
@@ -48,6 +65,19 @@ const Blog = ({ blogSelected: blog }) => {
         </p>
         <p>{author}</p>
         <button onClick={remove}>remove</button>
+        <h4>comments</h4>
+        <form onSubmit={comment}>
+          <input
+            type='text'
+            value={commentIn}
+            onChange={(e) => setCommentIn(e.target.value)}
+            placeholder='comment please'
+          />
+          <button type='submit'>comment</button>
+        </form>
+        {comments.map((comment, i) => (
+          <p key={i}>{comment}</p>
+        ))}
       </div>
     </div>
   )

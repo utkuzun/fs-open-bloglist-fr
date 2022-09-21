@@ -37,10 +37,10 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='flex-col'>
       <h2>Login</h2>
-      <div>
-        <label htmlFor='username'>username</label>
+      <div className='form-field flex-col'>
+        <label htmlFor='username'>username :</label>
         <input
           type='text'
           name='username'
@@ -48,8 +48,8 @@ const Login = () => {
           onChange={handleLoginFormChange}
         />
       </div>
-      <div>
-        <label htmlFor='password'>password</label>
+      <div className='form-field flex-col'>
+        <label htmlFor='password'>password :</label>
         <input
           type='password'
           name='password'

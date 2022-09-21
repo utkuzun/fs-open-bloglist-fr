@@ -27,18 +27,9 @@ const Blogs = () => {
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
-
-      <br />
-      <ToggleBox
-        showChildren={showChildren}
-        setShowChildren={setShowChildren}
-        buttonLabel={'add blog'}
-      >
-        <AddBlog createBlog={createBlog} />
-      </ToggleBox>
-      <ul>
+    <section>
+      <h3>blogs</h3>
+      <ul className='blog-list flex-col'>
         {blogs
           .slice()
           .sort((a, b) => b.likes - a.likes)
@@ -48,7 +39,14 @@ const Blogs = () => {
             </li>
           ))}
       </ul>
-    </div>
+      <ToggleBox
+        showChildren={showChildren}
+        setShowChildren={setShowChildren}
+        buttonLabel={'add blog'}
+      >
+        <AddBlog createBlog={createBlog} />
+      </ToggleBox>
+    </section>
   )
 }
 

@@ -11,7 +11,7 @@ const ToggleBox = ({
   }
 
   return (
-    <>
+    <article className='toggle-box'>
       <button className={!showChildren ? 'show' : 'hide'} onClick={toggleShow}>
         {buttonLabel}
       </button>
@@ -20,7 +20,7 @@ const ToggleBox = ({
         {children}
         <button onClick={toggleShow}>cancel</button>
       </div>
-    </>
+    </article>
   )
 }
 

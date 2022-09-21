@@ -9,16 +9,20 @@ const Menu = () => {
   const dispatch = useDispatch()
   const { name } = user
 
+  if (!user.username) {
+    return null
+  }
+
   return (
     <nav>
-      {user.username ? (
-        <>
-          <Link to='/'>blogs</Link>
-          <Link to='/users'>users</Link>
-          <p>{name} logged in</p>
-          <button onClick={() => dispatch(logout())}>Logout</button>
-        </>
-      ) : null}
+      <div className='nav-links flex'>
+        <Link to='/'>blogs</Link>
+        <Link to='/users'>users</Link>
+      </div>
+      <div className='nav-info flex'>
+        <p>{name} logged in</p>
+        <button onClick={() => dispatch(logout())}>Logout</button>
+      </div>
     </nav>
   )
 }

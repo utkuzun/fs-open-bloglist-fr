@@ -21,39 +21,37 @@ const AddBlog = ({ createBlog }) => {
     }
   }
   return (
-    <>
-      <h1>create new</h1>
-      <form onSubmit={handleAddblogSubmit}>
-        <div>
-          <label htmlFor='title'>title</label>
-          <input
-            type='text'
-            name='title'
-            value={title}
-            onChange={handleBlogFormChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='author'>author</label>
-          <input
-            type='text'
-            name='author'
-            value={author}
-            onChange={handleBlogFormChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='url'>url</label>
-          <input
-            type='text'
-            name='url'
-            value={url}
-            onChange={handleBlogFormChange}
-          />
-        </div>
-        <button type='submit'>submit</button>
-      </form>
-    </>
+    <form onSubmit={handleAddblogSubmit} className='flex-col'>
+      <h3>create new</h3>
+      <div className='form-field flex-col'>
+        <label htmlFor='title'>title</label>
+        <input
+          type='text'
+          name='title'
+          value={title}
+          onChange={handleBlogFormChange}
+        />
+      </div>
+      <div className='form-field flex-col'>
+        <label htmlFor='author'>author</label>
+        <input
+          type='text'
+          name='author'
+          value={author}
+          onChange={handleBlogFormChange}
+        />
+      </div>
+      <div className='form-field flex-col'>
+        <label htmlFor='url'>url</label>
+        <input
+          type='text'
+          name='url'
+          value={url}
+          onChange={handleBlogFormChange}
+        />
+      </div>
+      <button type='submit'>submit</button>
+    </form>
   )
 }
 

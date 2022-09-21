@@ -6,7 +6,7 @@ const Users = () => {
   const users = useSelector((state) => state.users)
 
   return (
-    <>
+    <section>
       <h2>Users</h2>
       <table>
         <thead>
@@ -28,7 +28,7 @@ const Users = () => {
           ))}
         </tbody>
       </table>
-    </>
+    </section>
   )
 }
 

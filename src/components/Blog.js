@@ -10,6 +10,9 @@ import { displayInfo } from '../reducers/infoReducer'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart, faComment, faTrash } from '@fortawesome/free-solid-svg-icons'
+
 const Blog = ({ blogSelected: blog }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -56,30 +59,57 @@ const Blog = ({ blogSelected: blog }) => {
     }
   }
   return (
-    <div>
-      <div>
-        <p>{title}</p>
-        <p>{url}</p>
-        <p>
-          likes {likes} <button onClick={increaseLike}>like</button>
-        </p>
-        <p>{author}</p>
-        <button onClick={remove}>remove</button>
-        <h4>comments</h4>
-        <form onSubmit={comment}>
+    <section>
+      <article className='flex-col blog-article'>
+        <div className='blog-info'>
+          <p>{author}</p>
+          <p>{url}</p>
+        </div>
+        <div className='blog-content'>
+          <h4>{title}</h4>
+        </div>
+        <div className='blog-tools flex'>
+          <div className='blog-tool flex'>
+            <FontAwesomeIcon
+              className='tool-icon'
+              icon={faHeart}
+              onClick={increaseLike}
+            />
+            <p>{likes}</p>
+          </div>
+          <div className='blog-tool flex'>
+            <FontAwesomeIcon
+              className='tool-icon'
+              icon={faComment}
+              onClick={increaseLike}
+            />
+            <p>{comments.length}</p>
+          </div>
+          <div className='blog-tool flex'>
+            <FontAwesomeIcon
+              className='tool-icon'
+              icon={faTrash}
+              onClick={remove}
+            />
+          </div>
+        </div>
+        <div className='comment-line'>
           <input
             type='text'
             value={commentIn}
             onChange={(e) => setCommentIn(e.target.value)}
             placeholder='comment please'
           />
-          <button type='submit'>comment</button>
-        </form>
+          <button onClick={comment}>comment</button>
+        </div>
+
         {comments.map((comment, i) => (
-          <p key={i}>{comment}</p>
+          <div key={i} className='comment-line'>
+            <p>{comment}</p>
+          </div>
         ))}
-      </div>
-    </div>
+      </article>
+    </section>
   )
 }
 

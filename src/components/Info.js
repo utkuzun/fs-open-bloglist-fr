@@ -11,7 +11,7 @@ const Info = () => {
   }
   return (
     <>
-      <div className={`info-container ${status}`}>
+      <div className={`info-container flex ${status}`}>
         <p className={`info-text ${status}`}>{message}</p>
       </div>
     </>

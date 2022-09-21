@@ -48,7 +48,7 @@ const App = () => {
     : null
 
   return (
-    <div>
+    <main>
       <Menu />
       <Info />
       <Routes>
@@ -67,7 +67,7 @@ const App = () => {
           element={user.username ? <Blogs /> : <Navigate replace to='/login' />}
         />
       </Routes>
-    </div>
+    </main>
   )
 }
 
